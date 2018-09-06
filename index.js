@@ -13,14 +13,26 @@ function initializeApp(data) {
   })
 
   document.getElementById('omakase').addEventListener('click', function () {
-    var foods = ["302", "303", "304", "305", "306", "307"];
-    var food = foods[Math.floor(Math.random() * foods.length)];
+    var foods = { rice: "302", sushi: "303", pizza: "304", noodle: "305", chicken: "306", cake: "307" };
+    var keys = Object.keys(foods);
+    var foodName = keys[Math.floor(Math.random() * keys.length)];
+    var text = "Today is " + foodName;
 
-    // Send message to the talk screen where the LIFF application is opne.
+    // Send text message to the talk screen where the LIFF application is opne.
+    liff.sendMessages([{
+      type: "text",
+      text: text
+    }]).then(function () {
+      window.alert("Message sent");
+    }).catch(function (error) {
+      window.alert("Error sending message: " + error);
+    })
+
+    // Send sticler
     liff.sendMessages([{
       type: "sticker",
       packageId: "4",
-      stickerId: food
+      stickerId: foods[foodName]
     }]).then(function () {
       window.alert("Message sent");
     }).catch(function (error) {
